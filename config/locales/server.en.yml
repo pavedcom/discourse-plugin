@@ -1,0 +1,6 @@
+en:
+  site_settings:
+    paved_email_banner_enabled: "Enable email banner?"
+    paved_email_banner_base_url: "Base URL"
+    paved_email_banner_api_key: "API key"
+    paved_email_banner_include_email: "Include email address?"
