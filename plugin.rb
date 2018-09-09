@@ -1,10 +1,12 @@
 # name: paved-email-banner
-# version: 0.1.1
+# version: 0.1.2
 # author: Muhlis Budi Cahyono (muhlisbc@gmail.com)
 
 enabled_site_setting :paved_email_banner_enabled
 
 after_initialize {
+
+  SiteSetting.strip_images_from_short_emails = false
 
   class ::PavedEmailBanner
 
@@ -13,8 +15,8 @@ after_initialize {
       @random_id = SecureRandom.alphanumeric
     end
 
-    def html
-      banner = %w(desktop mobile).map do |size|
+    def banner
+      %w(desktop mobile).map do |size|
         banner_class = "banner" + size.capitalize
 
         <<~HTML
@@ -27,41 +29,41 @@ after_initialize {
           </div>
         HTML
       end.join
+    end
 
+    def html
       style + banner
     end
 
+    def style
+      <<~HTML
+        <style type="text/css">
+          .pavedBanner {
+            display: block;
+            width: 100% !important;
+          }
+
+          .pavedBannerImg {
+            width: 100% !important;
+            height: auto !important;
+          }
+
+          @media only screen and (max-device-width:480px) {
+            .bannerDesktop {
+              display: none !important;
+            }
+          }
+
+          @media only screen and (min-device-width:481px) {
+            .bannerMobile {
+              display: none !important;
+            }
+          }
+        </style>
+      HTML
+    end
+
     private
-
-      def style
-        <<~HTML
-          <style>
-
-            .pavedBanner {
-              display: block;
-              width: 100% !important;
-            }
-
-            .pavedBannerImg {
-              width: 100% !important;
-              height: auto !important;
-            }
-
-            @media only screen and (max-device-width:480px) {
-              .bannerDesktop {
-                display: none !important;
-              }
-            }
-
-            @media only screen and (min-device-width:481px) {
-              .bannerMobile {
-                display: none !important;
-              }
-            }
-
-          </style>
-        HTML
-      end
 
       def banner_url
         "#{SiteSetting.paved_email_banner_base_url}/click?id=#{@random_id}"
@@ -87,27 +89,30 @@ after_initialize {
     def html
       html_str = orig_html
 
-      return html_str if !SiteSetting.paved_email_banner_enabled
+      if !SiteSetting.paved_email_banner_enabled
+        return html_str.gsub("[paved_email_banner]", "")
+      end
 
-      banner = PavedEmailBanner.new(@message).html
+      paved_email_banner = PavedEmailBanner.new(@message)
+      banner = paved_email_banner.banner
+      fragment = nil
 
       if (SiteSetting.paved_email_banner_selective_placement && @message.discourse_email_type != "digest")
         html_str.gsub!("[paved_email_banner]", banner)
-
-        return html_str
+        fragment = Nokogiri::HTML.fragment(html_str)
       else
         html_str.gsub!("[paved_email_banner]", "")
+
         fragment  = Nokogiri::HTML.fragment(html_str)
         body_el   = fragment.css("body").first
 
-        if body_el
-          body_el.prepend_child(banner)
-        else
-          fragment.prepend_child(banner)
-        end
-
-        return fragment.to_html
+        body_el ? body_el.prepend_child(banner) : fragment.prepend_child(banner)
       end
+
+      fragment = fragment.css("body").first ? fragment.to_html : "<body>#{fragment.to_html}</body>"
+      head_el = "<head>#{paved_email_banner.style}</head>"
+
+      Nokogiri::HTML(head_el + fragment).to_html
     end
 
   }
