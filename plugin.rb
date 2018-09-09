@@ -1,5 +1,5 @@
 # name: paved-email-banner
-# version: 0.1.0
+# version: 0.1.1
 # author: Muhlis Budi Cahyono (muhlisbc@gmail.com)
 
 enabled_site_setting :paved_email_banner_enabled
@@ -15,11 +15,13 @@ after_initialize {
 
     def html
       banner = %w(desktop mobile).map do |size|
+        banner_class = "banner" + size.capitalize
+
         <<~HTML
-          <div class="paved-banner banner-#{size}">
-            <a href="#{banner_url}" class="paved-banner banner-#{size}" title="">
-              <span class="banner-#{size}">
-                <img class="paved-banner-img banner-#{size}" src="#{banner_img(size)}" alt="" width="" height="" />
+          <div class="pavedBanner #{banner_class}">
+            <a href="#{banner_url}" class="pavedBanner #{banner_class}" title="">
+              <span class="#{banner_class}">
+                <img class="pavedBannerImg #{banner_class}" src="#{banner_img(size)}" alt="banner" width="" height="" />
               </span>
             </a>
           </div>
@@ -35,24 +37,24 @@ after_initialize {
         <<~HTML
           <style>
 
-            .paved-banner {
+            .pavedBanner {
               display: block;
               width: 100% !important;
             }
 
-            .paved-banner-img {
+            .pavedBannerImg {
               width: 100% !important;
               height: auto !important;
             }
 
             @media only screen and (max-device-width:480px) {
-              .banner-desktop {
+              .bannerDesktop {
                 display: none !important;
               }
             }
 
             @media only screen and (min-device-width:481px) {
-              .banner-mobile {
+              .bannerMobile {
                 display: none !important;
               }
             }
@@ -87,20 +89,48 @@ after_initialize {
 
       return html_str if !SiteSetting.paved_email_banner_enabled
 
-      fragment  = Nokogiri::HTML.fragment(html_str)
-      body_el   = fragment.css("body").first
-      banner    = PavedEmailBanner.new(@message).html
+      banner = PavedEmailBanner.new(@message).html
 
-      if body_el
-        body_el.prepend_child(banner)
+      if (SiteSetting.paved_email_banner_selective_placement && @message.discourse_email_type != "digest")
+        html_str.gsub!("[paved_email_banner]", banner)
+
+        return html_str
       else
-        fragment.prepend_child(banner)
+        html_str.gsub!("[paved_email_banner]", "")
+        fragment  = Nokogiri::HTML.fragment(html_str)
+        body_el   = fragment.css("body").first
+
+        if body_el
+          body_el.prepend_child(banner)
+        else
+          fragment.prepend_child(banner)
+        end
+
+        return fragment.to_html
       end
-
-      fragment.to_html
-
     end
 
+  }
+
+  require_dependency "user_notifications"
+  UserNotifications.class_eval {
+    alias_method :orig_digest, :digest
+
+    def digest(user, opts = {})
+      message = orig_digest(user, opts)
+
+      return message if !SiteSetting.paved_email_banner_enabled
+
+      if message
+        message.discourse_email_type = "digest"
+      end
+
+      message
+    end
+  }
+
+  ::Mail::Message.class_eval {
+    attr_accessor :discourse_email_type
   }
 
 }
