@@ -1,5 +1,5 @@
 # name: paved-email-banner
-# version: 0.1.2
+# version: 0.1.3
 # author: Muhlis Budi Cahyono (muhlisbc@gmail.com)
 
 enabled_site_setting :paved_email_banner_enabled
@@ -41,6 +41,7 @@ after_initialize {
           .pavedBanner {
             display: block;
             width: 100% !important;
+            text-align: center;
           }
 
           .pavedBannerImg {
@@ -51,12 +52,16 @@ after_initialize {
           @media only screen and (max-device-width:480px) {
             .bannerDesktop {
               display: none !important;
+              max-width: 315px !important;
+              max-height: 98px !important;
             }
           }
 
           @media only screen and (min-device-width:481px) {
             .bannerMobile {
               display: none !important;
+              max-width: 420px !important;
+              max-height: 130px !important;
             }
           }
         </style>
