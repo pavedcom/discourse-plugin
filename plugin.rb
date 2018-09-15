@@ -23,7 +23,7 @@ after_initialize {
           <div class="pavedBanner #{banner_class}">
             <a href="#{banner_url}" class="pavedBanner #{banner_class}" title="">
               <span class="#{banner_class}">
-                <img class="pavedBannerImg #{banner_class}" src="#{banner_img(size)}" alt="banner" width="" height="" />
+                <img class="pavedBannerImg #{banner_class}" src="#{banner_img(size)}" alt="banner" width="" height="" style="max-width:420px" />
               </span>
             </a>
           </div>
