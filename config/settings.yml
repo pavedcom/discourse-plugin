@@ -8,4 +8,4 @@ plugins:
   paved_email_banner_include_email:
     default: true
   paved_email_banner_selective_placement:
-    default: true
+    default: false
