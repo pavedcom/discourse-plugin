@@ -17,7 +17,9 @@ You can find the plugin installation instructions here: https://meta.discourse.o
 
 ![Step Two](https://downloads.intercomcdn.com/i/o/75160382/941afd236c4f517315a05e58/Admin_-_Discourse.png)
 
-3. If you have styled your Discourse emails, you will need to turn off our 'Automatically Include in Emails' setting and insert our banner manually in to your emails using [paved_banner]. You can edit these email templates in your Discourse Admin Panel under Customize > Email Templates.
+3. If you have styled your Discourse emails, you will need to turn off our 'Automatically Include in Emails' setting and insert our banner manually in to your emails using ```[paved_email_banner]```. You can edit these email templates in your Discourse Admin Panel under Customize > Email Templates.
+
+
 ![Step Three](https://downloads.intercomcdn.com/i/o/76724662/73ffec491a84e9c96d40d5de/Screen+Shot+2018-09-17+at+3.03.57+PM.png)
 
 That's it! We'll automatically populate the banner in your email sends.
