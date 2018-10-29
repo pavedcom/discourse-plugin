@@ -67,7 +67,7 @@ after_initialize {
     private
 
       def banner_url
-        "#{SiteSetting.paved_email_banner_base_url}/click?id=#{@random_id}"
+        "https://serve.paved.com/click?id=#{@random_id}"
       end
 
       def banner_img(size)
@@ -77,7 +77,7 @@ after_initialize {
           params[:email] = @message.to
         end
 
-        "#{SiteSetting.paved_email_banner_base_url}/banner/#{SiteSetting.paved_email_banner_api_key}?#{params.to_query}"
+        "https://serve.paved.com/banner/#{SiteSetting.paved_email_banner_api_key}?#{params.to_query}"
       end
 
   end
