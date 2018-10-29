@@ -1,7 +1,3 @@
-# name: paved-email-banner
-# version: 0.1.3
-# author: Muhlis Budi Cahyono (muhlisbc@gmail.com)
-
 enabled_site_setting :paved_email_banner_enabled
 
 after_initialize {
@@ -16,7 +12,7 @@ after_initialize {
     end
 
     def banner
-      %w(desktop mobile).map do |size|
+      %w(desktop).map do |size|
         banner_class = "banner" + size.capitalize
 
         <<~HTML
