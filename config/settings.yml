@@ -1,8 +1,6 @@
 plugins:
   paved_email_banner_enabled:
     default: true
-  paved_email_banner_base_url:
-    default: "http://serve.paved.com"
   paved_email_banner_api_key:
     default: ""
   paved_email_banner_include_email:
