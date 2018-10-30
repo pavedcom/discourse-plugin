@@ -1,3 +1,7 @@
+# name: paved-email-banner	
+# version: 0.1.4	
+# author: Paved (hey@paved.com	
+
 enabled_site_setting :paved_email_banner_enabled
 
 after_initialize {
