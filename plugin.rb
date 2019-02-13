@@ -1,6 +1,7 @@
 # name: paved-email-banner	
 # version: 0.1.5	
-# author: Paved (hey@paved.com	
+# author: Paved (hey@paved.com)	
+# url: https://github.com/pavedcom/discourse-plugin
 
 enabled_site_setting :paved_email_banner_enabled
 
