@@ -20,10 +20,10 @@ after_initialize {
         banner_class = "banner" + size.capitalize
 
         <<~HTML
-          <div class="pavedBanner #{banner_class}">
-            <a href="#{banner_url}" class="pavedBanner #{banner_class}" title="">
-              <span class="#{banner_class}">
-                <img class="pavedBannerImg #{banner_class}" src="#{banner_img(size)}" alt="banner" width="" height="" style="max-width:420px" />
+          <div class="pavedBanner">
+            <a href="#{banner_url}" class="pavedBanner" title="">
+              <span>
+                <img class="pavedBannerImg" src="#{banner_img(size)}" alt="" width="" height="" />
               </span>
             </a>
           </div>
@@ -42,27 +42,6 @@ after_initialize {
             display: block;
             width: 100% !important;
             text-align: center;
-          }
-
-          .pavedBannerImg {
-            width: 100% !important;
-            height: auto !important;
-          }
-
-          @media only screen and (max-device-width:480px) {
-            .bannerDesktop {
-              display: none !important;
-              max-width: 315px !important;
-              max-height: 98px !important;
-            }
-          }
-
-          @media only screen and (min-device-width:481px) {
-            .bannerMobile {
-              display: none !important;
-              max-width: 420px !important;
-              max-height: 130px !important;
-            }
           }
         </style>
       HTML
