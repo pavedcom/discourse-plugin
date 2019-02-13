@@ -1,5 +1,5 @@
 # name: paved-email-banner	
-# version: 0.1.4	
+# version: 0.1.5	
 # author: Paved (hey@paved.com	
 
 enabled_site_setting :paved_email_banner_enabled
