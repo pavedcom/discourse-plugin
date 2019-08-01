@@ -1,5 +1,5 @@
 # name: paved-email-banner	
-# version: 0.1.5	
+# version: 0.1.6	
 # author: Paved (hey@paved.com)	
 # url: https://github.com/pavedcom/discourse-plugin
 
@@ -17,19 +17,15 @@ after_initialize {
     end
 
     def banner
-      %w(desktop).map do |size|
-        banner_class = "banner" + size.capitalize
+      <<~HTML
+        <a href="#{desktop_banner_click_url}" style="display:none" id="desktop">
+          <span class="pad-img" style="display:block;background-repeat: no-repeat !important;background-position: center !important;"></span> 
+        </a>
 
-        <<~HTML
-          <div class="pavedBanner">
-            <a href="#{banner_url}" class="pavedBanner" title="">
-              <span>
-                <img class="pavedBannerImg" src="#{banner_img(size)}" alt="" width="" height="" />
-              </span>
-            </a>
-          </div>
-        HTML
-      end.join
+        <a href="#{mobile_banner_click_url}" id="mobile">
+          <span class="pad-img" style="display:block;background-repeat: no-repeat !important;background-position: center !important;"></span> 
+        </a>
+      HTML
     end
 
     def html
@@ -38,11 +34,24 @@ after_initialize {
 
     def style
       <<~HTML
-        <style type="text/css">
-          .pavedBanner {
-            display: block;
-            width: 100% !important;
-            text-align: center;
+        <style>
+          @media only screen and (max-device-width: 489px) {
+            .pad-img {
+              background-image: url(#{mobile_banner_img_url}) !important;
+              width: 300px !important;
+              height: 250px !important;
+            }
+            desktop {display: none !important;}
+          }
+
+          @media only screen and (min-device-width: 490px) {
+            .pad-img {
+              background-image: url(#{desktop_banner_img_url}) !important;
+              width: 300px !important;
+              height: 250px !important;
+            }
+            mobile {display: none !important;}
+            desktop {display: unset !important;}
           }
         </style>
       HTML
@@ -50,18 +59,20 @@ after_initialize {
 
     private
 
-      def banner_url
-        "https://serve.paved.com/click?id=#{@random_id}"
+      def desktop_banner_click_url
+        "https://pa.pvd.to/click/#{SiteSetting.paved_email_banner_desktop_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
       end
 
-      def banner_img(size)
-        params = { size: size, id: @random_id }
+      def mobile_banner_click_url
+        "https://pa.pvd.to/click/#{SiteSetting.paved_email_banner_mobile_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
+      end
 
-        if SiteSetting.paved_email_banner_include_email
-          params[:email] = @message.to
-        end
+      def desktop_banner_img_url
+        "https://pa.pvd.to/serve/#{SiteSetting.paved_email_banner_desktop_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
+      end
 
-        "https://serve.paved.com/banner/#{SiteSetting.paved_email_banner_api_key}?#{params.to_query}"
+      def mobile_banner_img_url
+        "https://pa.pvd.to/serve/#{SiteSetting.paved_email_banner_mobile_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
       end
 
   end
@@ -124,3 +135,5 @@ after_initialize {
   }
 
 }
+
+

@@ -1,7 +1,17 @@
 plugins:
   paved_email_banner_enabled:
     default: true
-  paved_email_banner_api_key:
+  paved_email_banner_desktop_adzone_key:
+    default: ""
+  paved_email_banner_desktop_adzone_width:
+    default: ""
+  paved_email_banner_desktop_adzone_height:
+    default: ""
+  paved_email_banner_mobile_adzone_key:
+    default: ""
+  paved_email_banner_mobile_adzone_width:
+    default: ""
+  paved_email_banner_mobile_adzone_height:
     default: ""
   paved_email_banner_include_email:
     default: true

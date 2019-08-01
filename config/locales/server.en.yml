@@ -2,6 +2,12 @@ en:
   site_settings:
     paved_email_banner_enabled: "Enable email banner?"
     paved_email_banner_base_url: "Base URL"
-    paved_email_banner_api_key: "API key"
     paved_email_banner_include_email: "Include email address?"
     paved_email_banner_selective_placement: "Replace '[paved_email_banner]' in the email template with banner"
+    paved_email_banner_desktop_adzone_key: "Desktop Adzone Key"
+    paved_email_banner_desktop_adzone_width: "Desktop Banner Width"
+    paved_email_banner_desktop_adzone_height: "Desktop Banner Height"
+    paved_email_banner_mobile_adzone_key: "Mobile Adzone Key"
+    paved_email_banner_mobile_adzone_width: "Mobile Banner Width"
+    paved_email_banner_mobile_adzone_height: "Mobile Banner Height"
+
