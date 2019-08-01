@@ -1,5 +1,5 @@
 # name: paved-email-banner	
-# version: 0.1.6	
+# version: 0.1.7
 # author: Paved (hey@paved.com)	
 # url: https://github.com/pavedcom/discourse-plugin
 
