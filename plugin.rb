@@ -1,5 +1,5 @@
 # name: paved-email-banner	
-# version: 0.1.9
+# version: 0.1.10
 # author: Paved (hey@paved.com)	
 # url: https://github.com/pavedcom/discourse-plugin
 
@@ -108,7 +108,7 @@ after_initialize {
         fragment = Nokogiri::HTML.fragment(html_str)
       elsif @message.discourse_email_type == "digest"
         fragment = Nokogiri::HTML.fragment(html_str)
-        fragment.search('table[dir=ltr] tbody')[0] << "<tr><td>#{banner}</td><tr>"
+        fragment.search('table[dir=ltr]')[0] << "<tr><td>#{banner}</td><tr>"
       else
         html_str.gsub!("[paved_email_banner]", "")
 
