@@ -18,13 +18,19 @@ after_initialize {
 
     def banner
       <<~HTML
-        <a href="#{desktop_banner_click_url}" style="display:none" id="desktop">
-          <span class="pad-img" style="display:block;background-repeat: no-repeat !important;background-position: center !important;"></span> 
-        </a>
+      <table style="width:100%">
+        <tr>
+          <td align="center">
+            <a href="#{desktop_banner_click_url}" style="display:none" id="desktop">
+              <span id="pad-img-desktop" style="display:block;background-repeat: no-repeat !important;background-position: center !important;"></span> 
+            </a>
 
-        <a href="#{mobile_banner_click_url}" id="mobile">
-          <span class="pad-img" style="display:block;background-repeat: no-repeat !important;background-position: center !important;"></span> 
-        </a>
+            <a href="#{mobile_banner_click_url}" id="mobile">
+              <span id="pad-img-mobile" style="display:block;background-repeat: no-repeat !important;background-position: center !important;"></span> 
+            </a>
+          </td>
+        </tr>
+      </table>
       HTML
     end
 
@@ -36,22 +42,22 @@ after_initialize {
       <<~HTML
         <style>
           @media only screen and (max-device-width: 489px) {
-            .pad-img {
+            #pad-img-mobile {
               background-image: url(#{mobile_banner_img_url}) !important;
-              width: 300px !important;
-              height: 250px !important;
+              width: #{SiteSetting.paved_email_banner_mobile_adzone_width}px !important;
+              height: #{SiteSetting.paved_email_banner_mobile_adzone_height}px !important;
             }
             desktop {display: none !important;}
           }
 
           @media only screen and (min-device-width: 490px) {
-            .pad-img {
+            #pad-img-desktop {
               background-image: url(#{desktop_banner_img_url}) !important;
-              width: 300px !important;
-              height: 250px !important;
+              width: #{SiteSetting.paved_email_banner_desktop_adzone_width}px !important;
+              height: #{SiteSetting.paved_email_banner_desktop_adzone_height}px !important;
             }
-            mobile {display: none !important;}
-            desktop {display: unset !important;}
+            #mobile {display: none !important;}
+            #desktop {display: unset !important;}
           }
         </style>
       HTML
@@ -59,20 +65,24 @@ after_initialize {
 
     private
 
+      def email_address
+        @message.to ? @message.to[0] : nil
+      end
+
       def desktop_banner_click_url
-        "https://pa.pvd.to/click/#{SiteSetting.paved_email_banner_desktop_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
+        "https://pa.pvd.to/click/#{SiteSetting.paved_email_banner_desktop_adzone_key}?email=#{email_address}&campaign_id=#{@random_id}"
       end
 
       def mobile_banner_click_url
-        "https://pa.pvd.to/click/#{SiteSetting.paved_email_banner_mobile_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
+        "https://pa.pvd.to/click/#{SiteSetting.paved_email_banner_mobile_adzone_key}?email=#{email_address}&campaign_id=#{@random_id}"
       end
 
       def desktop_banner_img_url
-        "https://pa.pvd.to/serve/#{SiteSetting.paved_email_banner_desktop_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
+        "https://pa.pvd.to/serve/#{SiteSetting.paved_email_banner_desktop_adzone_key}?email=#{email_address}&campaign_id=#{@random_id}"
       end
 
       def mobile_banner_img_url
-        "https://pa.pvd.to/serve/#{SiteSetting.paved_email_banner_mobile_adzone_key}?email=#{@message.to}&campaign_id=#{@random_id}"
+        "https://pa.pvd.to/serve/#{SiteSetting.paved_email_banner_mobile_adzone_key}?email=#{email_address}&campaign_id=#{@random_id}"
       end
 
   end
